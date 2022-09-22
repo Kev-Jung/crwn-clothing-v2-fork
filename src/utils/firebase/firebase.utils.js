@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app'
-import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword} from 'firebase/auth'
+import {getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
 import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -23,7 +23,14 @@ provider.setCustomParameters({
 
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider)
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider)
+
+
+// -------------- Related to Native Email & Password Authentication --------------
+export const signInUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password)
+}
+
 
 // -------------- Related to FireStore Database --------------
 export const db = getFirestore()
@@ -50,7 +57,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
   return userDocRef;
 }
 
-// -------------- Related to Native Email & Password Authentication --------------
+// -------------- Related to Creating User with Native Email & Password --------------
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
   try {
