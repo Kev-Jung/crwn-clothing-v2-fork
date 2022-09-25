@@ -8,7 +8,7 @@ import {
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 
-const SignInForm = ({ logGoogleUser }) => {
+const SignInForm = () => {
   const defaultFormFields = {
     email: "",
     password: "",
@@ -17,13 +17,8 @@ const SignInForm = ({ logGoogleUser }) => {
   const [formField, setFormField] = useState(defaultFormFields);
   const { email, password } = formField;
 
-  const resetformField = () => {
-    setFormField(defaultFormFields);
-  };
-
   const googleSignIn = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
 
   const handleChange = (e) => {
@@ -36,9 +31,7 @@ const SignInForm = ({ logGoogleUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await signInUserWithEmailAndPassword(email, password);
-      resetformField();
-      alert("success");
+      const { user } = await signInUserWithEmailAndPassword(email, password);
     } catch (error) {
       switch (error.code) {
         case "auth/wrong-password":
